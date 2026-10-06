@@ -56,6 +56,10 @@ export const siteConfig: SiteConfig = withUserConfig("site", {
 		// 以 "/" 开头的 public 路径与远程 URL 仍可用，但会保留原图、不生成候选。
 		// desktop 用于 >= 1024px；mobile 仅用于 < 1024px 的首页，手机非首页不显示壁纸。
 		// 数组顺序就是轮播顺序；只需要静态 Banner 时，每组保留一张图片即可。
+		//
+		// 【二次元装饰素材】版权素材不要放进 git 仓库：把图放到已 gitignore 的
+		// public/assets/anime-deco/，这里填 "/assets/anime-deco/<文件名>"；
+		// 授权现状、尺寸与体积预算见 docs/anime-decoration.md。
 		src: {
 			desktop: ["assets/images/banner/desktop/1.webp"],
 			mobile: ["assets/images/banner/mobile/1.webp"],

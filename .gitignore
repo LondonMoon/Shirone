@@ -54,6 +54,11 @@ public/assets/anime/covers/*
 public/assets/moments/thumbnails/*
 !public/assets/moments/thumbnails/.gitkeep
 
+# 二次元装饰素材：版权原因不进公开仓库，部署时单独同步
+# 授权现状、尺寸与体积预算见 docs/anime-decoration.md
+public/assets/anime-deco/*
+!public/assets/anime-deco/.gitkeep
+
 # local tooling artifacts
 .zcode/
 .codex-*.log
