@@ -1,15 +1,6 @@
 import { defineConfig } from "astro/config";
-import shirones from "shirones";
+import shirones from "./src/integration/index.ts"; 
 
 export default defineConfig({
   integrations: [shirones()],
-  vite: {
-    ssr: {
-      noExternal: true,
-    },
-    build: {
-
-      ssr: true,
-    },
-  },
 });
