@@ -78,3 +78,10 @@ export {
 	resolveUmamiOptions,
 	umamiConfig,
 } from "./umamiConfig";
+export {
+	type ResolvedVercountOptions,
+	resolveVercountOptions,
+	VERCOUNT_SITE_PV_ID,
+	VERCOUNT_SITE_UV_ID,
+	vercountConfig,
+} from "./vercountConfig";

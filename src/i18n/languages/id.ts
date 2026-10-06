@@ -190,6 +190,8 @@ export const id: Translation = {
 	[Key.guestbook]: "Buku Tamu",
 	[Key.guestbookBanner]: "Tinggalkan pesan tanpa perlu akun.",
 	[Key.newPost]: "Tulis artikel",
+	[Key.siteStatsPageViews]: "Total kunjungan",
+	[Key.siteStatsVisitors]: "Pengunjung",
 
 	[Key.untitled]: "Tanpa Judul",
 	[Key.uncategorized]: "Tanpa Kategori",

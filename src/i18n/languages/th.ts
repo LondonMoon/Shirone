@@ -177,6 +177,8 @@ export const th: Translation = {
 	[Key.guestbook]: "สมุดเยี่ยมชม",
 	[Key.guestbookBanner]: "ฝากข้อความได้โดยไม่ต้องสมัครบัญชี",
 	[Key.newPost]: "เขียนบทความใหม่",
+	[Key.siteStatsPageViews]: "ยอดเข้าชมรวม",
+	[Key.siteStatsVisitors]: "ผู้เข้าชม",
 
 	[Key.untitled]: "ไม่ได้ตั้งชื่อ",
 	[Key.uncategorized]: "ไม่ได้จัดหมวดหมู่",

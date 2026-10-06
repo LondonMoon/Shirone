@@ -178,6 +178,8 @@ export const zh_TW: Translation = {
 	[Key.guestbook]: "留言板",
 	[Key.guestbookBanner]: "歡迎在這裡留言，無需註冊帳號。",
 	[Key.newPost]: "寫新文章",
+	[Key.siteStatsPageViews]: "總訪問量",
+	[Key.siteStatsVisitors]: "總訪客數",
 
 	[Key.untitled]: "無標題",
 	[Key.uncategorized]: "未分類",

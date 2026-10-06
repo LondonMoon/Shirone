@@ -204,6 +204,9 @@ enum I18nKey {
 	statsDaysAgo = "statsDaysAgo",
 	profileStatsPageViews = "profileStatsPageViews",
 	profileStatsVisits = "profileStatsVisits",
+	/** 页脚全站统计（Vercount）：总访问量 / 总访客数 */
+	siteStatsPageViews = "siteStatsPageViews",
+	siteStatsVisitors = "siteStatsVisitors",
 
 	calendar = "calendar",
 	calendarBackToday = "calendarBackToday",

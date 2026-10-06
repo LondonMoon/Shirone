@@ -3,6 +3,7 @@ import { Font } from "astro:assets";
 import Snackbar from "@components/atoms/overlay/Snackbar.svelte";
 import ConfigCarrier from "@components/system/ConfigCarrier.astro";
 import UmamiRuntime from "@components/system/UmamiRuntime.astro";
+import VercountRuntime from "@components/system/VercountRuntime.astro";
 import { resolveAsset } from "@utils/asset-utils";
 import { pathsEqual, toAbsoluteUrl, url } from "@utils/url-utils";
 import {
@@ -11,8 +12,10 @@ import {
 	resolvedFontOptions,
 	resolveTextureOptions,
 	resolveUmamiOptions,
+	resolveVercountOptions,
 	siteConfig,
 	umamiConfig,
+	vercountConfig,
 } from "@/config";
 import type { SidebarPage } from "@/types/sidebarConfig";
 import {
@@ -87,6 +90,7 @@ const defaultTexturePreset = textureOptions.defaultPreset;
 const defaultTextureOpacity = textureOptions.defaultOpacity;
 const textureEnabled = textureOptions.enable;
 const umamiOptions = resolveUmamiOptions(umamiConfig);
+const vercountOptions = resolveVercountOptions(vercountConfig);
 
 const hasDesktopBanner = hasBannerImages(siteConfig.banner.src.desktop);
 const hasMobileBanner = hasBannerImages(siteConfig.banner.src.mobile);
@@ -231,6 +235,7 @@ const hasMonoFont =
 	>
 		<ConfigCarrier></ConfigCarrier>
 		{umamiOptions && <UmamiRuntime />}
+		{vercountOptions && <VercountRuntime />}
 		{textureEnabled && (
 			<div
 				id="m3e-texture-canvas"

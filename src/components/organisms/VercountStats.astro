@@ -1,0 +1,49 @@
+---
+/**
+ * 页脚全站统计（Vercount）：总访问量 + 总访客数。
+ *
+ * 「零额外负担」落点：
+ * - 未启用时直接 `return null` —— 零 DOM、零脚本、零请求、零布局偏移；
+ * - **不引入任何 `<style>` 块**：Astro 会把模块图里的样式提升进共享 CSS，
+ *   而本组件在页脚（每页都渲染），一旦有独立样式就会全站加载。这里只用
+ *   Tailwind 工具类消费既有令牌，因此不新增任何 CSS 资产。
+ *
+ * 数值由 Vercount 脚本按固定 id 回填（`vercount_value_site_pv` / `_site_uv`）；
+ * 脚本执行与去重由 `VercountRuntime` 负责。
+ */
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import {
+	resolveVercountOptions,
+	VERCOUNT_SITE_PV_ID,
+	VERCOUNT_SITE_UV_ID,
+	vercountConfig,
+} from "@/config";
+
+const options = resolveVercountOptions(vercountConfig);
+if (!options) {
+	return null;
+}
+---
+
+<div
+	class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.75rem] leading-[1.7] text-[var(--on-surface-variant)]"
+	data-vercount-root
+	data-vercount-script-url={options.scriptUrl}
+	aria-busy="true"
+>
+	<span class="inline-flex items-baseline gap-1">
+		{i18n(I18nKey.siteStatsPageViews)}
+		<span
+			id={VERCOUNT_SITE_PV_ID}
+			class="font-semibold text-[var(--primary)]"
+			data-vercount-value>—</span>
+	</span>
+	<span class="inline-flex items-baseline gap-1">
+		{i18n(I18nKey.siteStatsVisitors)}
+		<span
+			id={VERCOUNT_SITE_UV_ID}
+			class="font-semibold text-[var(--primary)]"
+			data-vercount-value>—</span>
+	</span>
+</div>

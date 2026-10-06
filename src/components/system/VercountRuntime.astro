@@ -1,0 +1,93 @@
+---
+/**
+ * Vercount 运行时：在持久壳内挂载（与 `UmamiRuntime` 并列），仅在启用时渲染。
+ *
+ * 为什么需要它而不是一个静态 `<script src>`：
+ * - Vercount 以**脚本执行**计一次浏览。页面首次加载执行一次即可，但站内导航
+ *   （Swup）不会重新执行已加载的脚本，所以每次导航都要注入一个新的 script 元素
+ *   —— 这是 `docs/on-demand-loading.md` §3 L4 记录的「一次性脚本例外」，
+ *   与 giscus 的情形同类；**不能**用 `loadScriptOnce()` 复用缓存脚本，那会让后续导航不计数；
+ * - 反过来，Swup 的多个生命周期事件都可能触发到这里，重复注入会**双倍计数**，
+ *   因此以「路径」为令牌保证同一次导航只注入一次；
+ * - 脚本只在页面上真的存在统计容器时才注入，避免无谓请求。
+ *
+ * 脚本地址由统计容器自己的 `data-vercount-script-url` 携带（而不是 `define:vars`）：
+ * 这样脚本是 Astro 正常处理的模块（可用 TS、不触发 is:inline 提示），
+ * 且「配置 → 容器 → 运行时」只有一条数据通路。
+ *
+ * 关闭时（`resolveVercountOptions()` 返回 `null`）本组件不渲染：页面里没有脚本、
+ * 没有容器、没有任何第三方请求。
+ */
+import { resolveVercountOptions, vercountConfig } from "@/config";
+
+const options = resolveVercountOptions(vercountConfig);
+if (!options) {
+	return null;
+}
+---
+
+<script>
+	(() => {
+		const SCRIPT_ID = "shirone-vercount-script";
+		const ROOT_SELECTOR = "[data-vercount-root]";
+		const READY_ATTR = "data-vercount-ready";
+		/** 上一次已计数的路径令牌（同一次导航只计一次） */
+		let countedPath: string | null = null;
+		let scheduled = false;
+
+		function activeRoot(): HTMLElement | null {
+			return document.querySelector<HTMLElement>(ROOT_SELECTOR);
+		}
+
+		/** 脚本加载结束（含失败）后统一解除 busy 状态：失败时保留占位符，不假装有数据 */
+		function settle() {
+			for (const root of document.querySelectorAll(ROOT_SELECTOR)) {
+				root.setAttribute(READY_ATTR, "true");
+				root.setAttribute("aria-busy", "false");
+			}
+		}
+
+		function count() {
+			const root = activeRoot();
+			const scriptUrl = root?.dataset.vercountScriptUrl;
+			if (!scriptUrl) return;
+
+			const path = window.location.pathname + window.location.search;
+			if (path === countedPath) return;
+			countedPath = path;
+
+			document.getElementById(SCRIPT_ID)?.remove();
+
+			const script = document.createElement("script");
+			script.id = SCRIPT_ID;
+			script.src = scriptUrl;
+			script.async = true;
+			script.addEventListener("load", settle, { once: true });
+			script.addEventListener("error", settle, { once: true });
+			document.head.appendChild(script);
+		}
+
+		function schedule() {
+			if (scheduled) return;
+			scheduled = true;
+			const run = () => {
+				scheduled = false;
+				count();
+			};
+			if (typeof window.requestAnimationFrame === "function") {
+				window.requestAnimationFrame(run);
+			} else {
+				window.setTimeout(run, 0);
+			}
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", schedule, { once: true });
+		} else {
+			schedule();
+		}
+		// 统计容器位于 `#swup-container` 内，站内导航会被替换，因此两个钩子都要接
+		document.addEventListener("swup:content:replace", schedule);
+		document.addEventListener("swup:page:view", schedule);
+	})();
+</script>
