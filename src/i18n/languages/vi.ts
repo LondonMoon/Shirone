@@ -187,6 +187,7 @@ export const vi: Translation = {
 
 	[Key.guestbook]: "Sổ lưu bút",
 	[Key.guestbookBanner]: "Để lại lời nhắn mà không cần tài khoản.",
+	[Key.newPost]: "Viết bài mới",
 
 	[Key.untitled]: "Không tiêu đề",
 	[Key.uncategorized]: "Chưa phân loại",

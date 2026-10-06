@@ -186,6 +186,7 @@ export const en: Translation = {
 
 	[Key.guestbook]: "Guestbook",
 	[Key.guestbookBanner]: "Leave a message here — no account needed.",
+	[Key.newPost]: "New post",
 
 	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",

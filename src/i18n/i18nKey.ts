@@ -177,6 +177,9 @@ enum I18nKey {
 	guestbook = "guestbook",
 	guestbookBanner = "guestbookBanner",
 
+	/** 「写新文章」快捷入口（顶栏图标按钮与首页 Hero 次级按钮共用） */
+	newPost = "newPost",
+
 	untitled = "untitled",
 	uncategorized = "uncategorized",
 	noTags = "noTags",

@@ -187,6 +187,7 @@ export const es: Translation = {
 
 	[Key.guestbook]: "Libro de visitas",
 	[Key.guestbookBanner]: "Deja un mensaje, no hace falta cuenta.",
+	[Key.newPost]: "Nueva entrada",
 
 	[Key.untitled]: "Sin título",
 	[Key.uncategorized]: "Sin categoría",

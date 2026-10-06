@@ -177,6 +177,7 @@ export const zh_CN: Translation = {
 
 	[Key.guestbook]: "留言板",
 	[Key.guestbookBanner]: "欢迎在这里留言，无需注册账号。",
+	[Key.newPost]: "写新文章",
 
 	[Key.untitled]: "无标题",
 	[Key.uncategorized]: "未分类",

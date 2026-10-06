@@ -184,6 +184,7 @@ export const ja: Translation = {
 
 	[Key.guestbook]: "ゲストブック",
 	[Key.guestbookBanner]: "アカウント登録なしでメッセージを残せます。",
+	[Key.newPost]: "記事を書く",
 
 	[Key.untitled]: "タイトルなし",
 	[Key.uncategorized]: "カテゴリなし",

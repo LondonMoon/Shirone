@@ -184,6 +184,7 @@ export const ko: Translation = {
 
 	[Key.guestbook]: "방명록",
 	[Key.guestbookBanner]: "계정 없이 메시지를 남길 수 있습니다.",
+	[Key.newPost]: "새 글 쓰기",
 
 	[Key.untitled]: "제목 없음",
 	[Key.uncategorized]: "분류되지 않음",

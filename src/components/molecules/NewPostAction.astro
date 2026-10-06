@@ -1,0 +1,123 @@
+---
+/**
+ * 「写新文章」入口 —— 导航栏图标按钮与 Hero 次级按钮共用同一份配置与同一套 URL 逻辑。
+ *
+ * 设计要点：
+ * - **零额外负担**：`newPostConfig` 未启用（或 repo 未配置）时本组件直接返回 `null`，
+ *   不留 DOM、不注入脚本、不产生请求；
+ * - **日期不吃陈旧值**：SSR 的 href 用构建期日期预填，浏览器端在点击前用**当天**
+ *   日期重算（静态站会被 CDN/浏览器缓存，构建日期可能已过时）；无 JS 时退回 SSR href，
+ *   仍指向正确的仓库/分支/目录，只是日期可能不是当天；
+ * - **URL 逻辑只有一份**：`@utils/new-post-url` 是零依赖纯模块，SSR 与客户端脚本共用，
+ *   避免「两处拼 URL，改一处忘一处」；
+ * - 图标走 `children` 插槽（`IconButton` 的 `icon` prop 依赖客户端水合，SSR 场景不渲染图标）。
+ */
+import IconButton from "@components/atoms/action/IconButton.svelte";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import { buildNewPostUrl, todayInTimeZone } from "@utils/new-post-url";
+import { Icon } from "astro-icon/components";
+import { newPostConfig, resolveNewPostOptions } from "@/config";
+
+interface Props {
+	/** icon：导航栏右侧图标按钮；cta：Hero 文案区里的次级按钮 */
+	variant?: "icon" | "cta";
+	class?: string;
+}
+
+const { variant = "icon", class: className } = Astro.props;
+const options = resolveNewPostOptions(newPostConfig);
+
+// 未启用 / repo 形状非法：整块短路，页面里不会出现任何痕迹
+if (!options) {
+	return null;
+}
+
+const label = i18n(I18nKey.newPost);
+const href = buildNewPostUrl(options.parts, todayInTimeZone(options.timeZone));
+// 供客户端脚本在点击前重算日期（解析后配置的最小快照）
+const partsJson = JSON.stringify(options.parts);
+---
+
+{variant === "icon" ? (
+	<span
+		class={className}
+		data-new-post-host
+		data-new-post-parts={partsJson}
+		data-new-post-tz={options.timeZone}
+	>
+		<IconButton
+			id="new-post-button"
+			href={href}
+			target="_blank"
+			rel="noopener noreferrer"
+			label={label}
+		>
+			<Icon name="material-symbols:edit-square-outline-rounded" class="text-[1.25rem]"></Icon>
+		</IconButton>
+	</span>
+) : (
+	<a
+		id="new-post-cta"
+		href={href}
+		target="_blank"
+		rel="noopener noreferrer"
+		class:list={["m3-new-post-cta", "m3-state-layer", className]}
+		data-new-post-host
+		data-new-post-parts={partsJson}
+		data-new-post-tz={options.timeZone}
+	>
+		<Icon name="material-symbols:edit-square-outline-rounded" class="text-[1.25rem]" aria-hidden="true"></Icon>
+		<span>{label}</span>
+	</a>
+)}
+
+<script>
+	import type { NewPostUrlParts } from "@/types/newPostConfig";
+	import { buildNewPostUrl, todayInTimeZone } from "@utils/new-post-url";
+
+	/**
+	 * 用「今天」重算所有发文入口的 href。
+	 *
+	 * 幂等：可安全地在每次 Swup 导航后重复调用（Hero 位于 `#swup-container` 内会被替换，
+	 * 顶栏按钮位于持久壳内不会被替换，两者用同一段逻辑处理）。
+	 */
+	function refreshNewPostLinks() {
+		const hosts = document.querySelectorAll<HTMLElement>("[data-new-post-host]");
+		for (const host of hosts) {
+			const anchor = host.matches("a") ? host : host.querySelector("a");
+			const rawParts = host.dataset.newPostParts;
+			if (!anchor || !rawParts) continue;
+			try {
+				const parts = JSON.parse(rawParts) as NewPostUrlParts;
+				const timeZone = host.dataset.newPostTz ?? "UTC";
+				anchor.setAttribute("href", buildNewPostUrl(parts, todayInTimeZone(timeZone)));
+			} catch {
+				// 解析失败就保留 SSR 渲染的 href —— 按钮依然可用，只是日期可能不是当天
+			}
+		}
+	}
+
+	refreshNewPostLinks();
+	document.addEventListener("swup:content:replace", refreshNewPostLinks);
+	document.addEventListener("swup:page:view", refreshNewPostLinks);
+</script>
+
+<style lang="stylus">
+/* Hero 次级按钮：M3E 令牌 + 共享状态层，不覆盖 BannerStage 自己的文案样式 */
+.m3-new-post-cta
+	display: inline-flex
+	align-items: center
+	gap: var(--m3e-space-2, 0.5rem)
+	margin-top: var(--m3e-space-4, 1rem)
+	padding: 0 var(--m3e-space-5, 1.25rem)
+	height: 2.75rem
+	border-radius: var(--shape-corner-full)
+	background: var(--secondary-container)
+	color: var(--on-secondary-container)
+	text-decoration: none
+	font: var(--m3e-type-label-large)
+	font-weight: 600
+	--m3e-state-color: var(--on-secondary-container)
+	transition: background-color var(--m3e-duration-short) var(--m3e-easing-standard)
+</style>

@@ -187,6 +187,7 @@ export const tr: Translation = {
 
 	[Key.guestbook]: "Misafir Defteri",
 	[Key.guestbookBanner]: "Hesap açmadan mesaj bırakabilirsiniz.",
+	[Key.newPost]: "Yeni yazı",
 
 	[Key.untitled]: "Başlıksız",
 	[Key.uncategorized]: "Katagorisiz",

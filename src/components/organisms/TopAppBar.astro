@@ -6,6 +6,7 @@
  * 菜单按钮点击派发 site-drawer:toggle 事件，由 SiteNavigationDrawer 监听开合。
  */
 import IconButton from "@components/atoms/action/IconButton.svelte";
+import NewPostAction from "@components/molecules/NewPostAction.astro";
 import { resolveNavBarLinks, resolvePageKey } from "@utils/nav-utils";
 import { url } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
@@ -85,6 +86,7 @@ function isActive(link: (typeof links)[number]): boolean {
 			})}
 		</nav>
 		<div class="flex-1"></div>
+		<NewPostAction class="shrink-0"></NewPostAction>
 		<Search client:only="svelte"></Search>
 		{!siteConfig.themeColor.fixed && (
 			<IconButton id="display-settings-switch" label="Display Settings" class="shrink-0">

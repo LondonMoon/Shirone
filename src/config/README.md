@@ -123,6 +123,7 @@ export const siteConfig: SiteConfig = withUserConfig("site", {
 | `postListConfig.ts` | 文章列表：分页大小 + 布局（list/grid 模式、封面位置、grid 卡片宽度档位） |
 | `articleConfig.ts` | 文章详情：最后更新提示、延伸阅读（相关/随机文章抽样）、以及文章尾部分享区块（总开关、海报生成与封面配置） |
 | `commentConfig.ts` | 评论系统：全局开关（默认关闭）、Provider 选择（Twikoo / Giscus）、视口懒加载与服务凭据配置；Giscus 基于 GitHub Discussions（需公开仓库 + 安装 giscus App + 从 giscus.app 取 repoId/categoryId），主题明暗双值跟随站点切换 |
+| `newPostConfig.ts` | 「写新文章」快捷入口：全局开关（主题默认关闭）、目标仓库 `owner/repo` / 分支 / 文章目录 / 文件名与预填模板（`{date}` = 站点时区当天）。启用后在顶栏与首页 Hero 各渲染一个入口，直链 GitHub 新建文件页；关闭时零 DOM、零脚本、零请求。URL 组装与日期换算的纯函数在 `src/utils/new-post-url.ts`（SSR 与客户端共用同一份） |
 | `contextMenuConfig.ts` | 桌面端右键增强：可选开关（当前默认开启）；配置允许页面与操作顺序，关闭时零 DOM、零监听器、零客户端资源 |
 | `umamiConfig.ts` | Umami 统计：全局开关（默认关闭）、公开分享统计读取，以及可选的官方访问采集脚本配置；支持内容仓 `config/umami.yaml` 覆盖（领域键 `umami`） |
 | `integrationsConfig.ts` | 所有模式（源码仓 + npm 包项目）共用的集成选项，唯一装载入口是 `src/integration/index.ts`：swup / astro-icon / expressive-code / svelte / mdx 的选项、`vite.build` 共用部分、`trailingSlash` 与 `image.endpoint.route` 的配对、音乐侧栏虚拟模块 id。**本目录里唯一的例外**：不走 barrel、不经 `withUserConfig`、也不被 `loadConfigModule` 动态加载（包模式在构建期把它打进 `dist/index.js`），所以它没有用户覆盖层，用户项目里的那份拷贝是死的 |
