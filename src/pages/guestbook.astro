@@ -1,0 +1,41 @@
+---
+/**
+ * 留言板（轻量页）。
+ *
+ * 取舍记录：
+ * - 复用既有 `CommentSection`，不新增任何评论实现；评论未启用时本页直接 404，
+ *   导航入口也由 `pruneUnavailableNavLinks()` 自动裁掉，不留死链。
+ * - 不新增 `SidebarPage` 标识：不向 `MainGridLayout` 传 `page`，配置了 `pages` 的
+ *   侧栏 widget 在本页按「标识未知」的既有语义隐藏；导航高亮改由
+ *   `resolvePageKey()` 按路由推导（`/guestbook` → `guestbook`），
+ *   因此 SSR 直达与 Swup 站内导航后的表现一致，无需改动类型联合。
+ */
+import CommentSection from "@components/organisms/comment/CommentSection.astro";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { commentConfig, resolveCommentOptions, siteConfig } from "@/config";
+
+// 与 posts/[...slug].astro 的判定口径一致：未启用或参数缺失时视为关闭
+if (resolveCommentOptions(commentConfig) === null) {
+	return Astro.redirect("/404/");
+}
+
+const pageTitle = i18n(I18nKey.guestbook);
+const pageDescription = i18n(I18nKey.guestbookBanner);
+---
+
+<MainGridLayout
+	title={pageTitle}
+	description={pageDescription}
+	hasComments={true}
+>
+	<CommentSection
+		context={{
+			key: "guestbook",
+			path: "/guestbook/",
+			title: pageTitle,
+			language: siteConfig.lang,
+		}}
+	/>
+</MainGridLayout>

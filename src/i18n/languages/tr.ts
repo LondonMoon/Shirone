@@ -183,6 +183,11 @@ export const tr: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"Yorumların gösterilmesi için JavaScript etkinleştirilmelidir",
 
+	[Key.postVisitCount]: "Görüntülenme",
+
+	[Key.guestbook]: "Misafir Defteri",
+	[Key.guestbookBanner]: "Hesap açmadan mesaj bırakabilirsiniz.",
+
 	[Key.untitled]: "Başlıksız",
 	[Key.uncategorized]: "Katagorisiz",
 	[Key.noTags]: "Tag Bulunamadı",

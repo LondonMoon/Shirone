@@ -173,6 +173,11 @@ export const zh_TW: Translation = {
 	[Key.commentsLoadFailed]: "評論載入失敗",
 	[Key.commentsRequiresJavaScript]: "評論區需要啟用 JavaScript 才能顯示",
 
+	[Key.postVisitCount]: "本頁閱讀",
+
+	[Key.guestbook]: "留言板",
+	[Key.guestbookBanner]: "歡迎在這裡留言，無需註冊帳號。",
+
 	[Key.untitled]: "無標題",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "無標籤",

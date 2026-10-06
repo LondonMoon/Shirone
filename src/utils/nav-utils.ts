@@ -91,5 +91,6 @@ export function resolvePageKey(
 	if (pathname === "/albums" || pathname.startsWith("/albums/"))
 		return "albums";
 	if (pathname === "/about") return "about";
+	if (pathname === "/guestbook") return "guestbook";
 	return "";
 }

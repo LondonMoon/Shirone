@@ -2,6 +2,7 @@
 import LoadingIndicator from "@components/atoms/feedback/LoadingIndicator.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
+import { resolveTwikooLocale } from "@utils/twikoo-locale";
 import stylus from "stylus";
 import type { CommentContext, TwikooConfig } from "@/types/commentConfig";
 
@@ -12,7 +13,10 @@ interface Props {
 }
 
 const { context, config, lazy = true } = Astro.props;
-const resolvedLang = config.lang === "auto" ? context.language : config.lang;
+// 站点语言码 → Twikoo 语言码：Twikoo 2.0 只内置 zh-CN / en，其余按地区码
+// （ja-JP、zh-TW…）懒加载，原样透传站点语言码会让非英文语言静默回落英文。
+// 映射表与理由见 src/utils/twikoo-locale.ts。
+const resolvedLang = resolveTwikooLocale(context.language, config.lang);
 
 const twikooStylus = `/* ==========================================================================
 	   Twikoo 最小化补丁（Minimal Patch）
@@ -466,7 +470,24 @@ const twikooStylus = `/* =======================================================
 
 	.tk-admin-panel
 		position: relative
-		z-index: 100`;
+		z-index: 100
+
+	/* 14. 本页阅读量（官方方案：#twikoo_visitors 由 Twikoo 在挂载时回填）
+	   挂载完成（data-twikoo-ready）前保持隐藏，避免先露出占位 0。 */
+	.shirone-twikoo-wrapper .twikoo-visitors
+		display: none
+		align-items: baseline
+		gap: var(--m3e-space-2, 0.5rem)
+		margin-bottom: var(--m3e-space-4, 1rem)
+		color: var(--on-surface-variant)
+		font: var(--m3e-type-label-medium)
+
+	.shirone-twikoo-wrapper[data-twikoo-ready="true"] .twikoo-visitors
+		display: flex
+
+	.shirone-twikoo-wrapper .twikoo-visitors__value
+		color: var(--primary)
+		font-weight: 600`;
 
 const twikooStyles = await new Promise<string>((resolve, reject) => {
 	stylus.render(twikooStylus, (error, css) => {
@@ -485,6 +506,13 @@ const twikooStyles = await new Promise<string>((resolve, reject) => {
 	data-twikoo-lazy={lazy ? "true" : "false"}
 	data-twikoo-placeholder={config.placeholder}
 >
+	<!-- 本页阅读量：Twikoo 官方单篇访问量方案（id 固定为 twikoo_visitors），
+	     挂载完成后回填；官方明确「暂不支持全站访问量统计」，全站数字由页脚计数器负责 -->
+	<div class="twikoo-visitors">
+		<span class="twikoo-visitors__label">{i18n(I18nKey.postVisitCount)}</span>
+		<span id="twikoo_visitors" class="twikoo-visitors__value">0</span>
+	</div>
+
 	<!-- 初始加载与 Twikoo 运行时加载共用同一个 M3E 指示器 -->
 	<div class="twikoo-skeleton flex min-h-40 w-full flex-col items-center justify-center gap-3 py-6 text-sm text-[var(--on-surface-variant)]" role="status">
 		<span aria-hidden="true">
@@ -559,6 +587,9 @@ const twikooStyles = await new Promise<string>((resolve, reject) => {
 					path: path || window.location.pathname,
 					lang: lang || "zh-CN",
 				});
+
+				// 阅读量由 Twikoo 在挂载时回填 #twikoo_visitors；置位后才显示该行
+				wrapper.dataset.twikooReady = "true";
 
 				const textarea = wrapper.querySelector<HTMLTextAreaElement>(
 					".tk-input textarea",

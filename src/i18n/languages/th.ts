@@ -172,6 +172,11 @@ export const th: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"ความคิดเห็นจำเป็นต้องเปิดใช้งาน JavaScript เพื่อแสดงผล",
 
+	[Key.postVisitCount]: "ยอดเข้าชม",
+
+	[Key.guestbook]: "สมุดเยี่ยมชม",
+	[Key.guestbookBanner]: "ฝากข้อความได้โดยไม่ต้องสมัครบัญชี",
+
 	[Key.untitled]: "ไม่ได้ตั้งชื่อ",
 	[Key.uncategorized]: "ไม่ได้จัดหมวดหมู่",
 	[Key.noTags]: "ไม่มีป้ายกำกับ",

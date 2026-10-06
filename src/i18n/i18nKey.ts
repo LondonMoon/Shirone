@@ -171,6 +171,11 @@ enum I18nKey {
 	commentsLoading = "commentsLoading",
 	commentsLoadFailed = "commentsLoadFailed",
 	commentsRequiresJavaScript = "commentsRequiresJavaScript",
+	/** Twikoo 单篇访问量前缀（Twikoo 官方：暂不支持全站访问量统计） */
+	postVisitCount = "postVisitCount",
+
+	guestbook = "guestbook",
+	guestbookBanner = "guestbookBanner",
 
 	untitled = "untitled",
 	uncategorized = "uncategorized",

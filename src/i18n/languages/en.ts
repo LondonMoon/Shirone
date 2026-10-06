@@ -182,6 +182,11 @@ export const en: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"Comments require JavaScript to be displayed.",
 
+	[Key.postVisitCount]: "Page views",
+
+	[Key.guestbook]: "Guestbook",
+	[Key.guestbookBanner]: "Leave a message here — no account needed.",
+
 	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",
