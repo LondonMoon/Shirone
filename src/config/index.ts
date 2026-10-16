@@ -31,6 +31,16 @@ export {
 } from "./commentConfig";
 export { compassConfig } from "./compassConfig";
 export { contextMenuConfig } from "./contextMenuConfig";
+export {
+	DECOR_BANNER_DEFAULT_RATIO,
+	DECOR_STICKER_MAX_SIZE,
+	DECOR_STICKER_MIN_SIZE,
+	decorConfig,
+	resolveDecorOptions,
+	type ResolvedDecorBanner,
+	type ResolvedDecorOptions,
+	type ResolvedDecorSticker,
+} from "./decorConfig";
 export { devicesConfig } from "./devicesConfig";
 export { expressiveCodeConfig } from "./expressiveCodeConfig";
 export { fabConfig } from "./fabConfig";

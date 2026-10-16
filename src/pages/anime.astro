@@ -2,12 +2,16 @@
 /**
  * 番剧收藏页：数据经 utils/anime-data（AnimeSource 分发，本地/快照/Dev热加载）
  * 构建期/Dev环境取得后交给客户端岛渲染（筛选/过渡/加载更多均为交互态）。
+ *
+ * 装饰横幅落在 `<AnimeSection>` **之外**：它是纯 SSR 输出，不需要 hydration，
+ * 也不必改动交互岛的 runes 模板；没有配置素材时 `DecorBanner` 直接 return null。
  */
+import DecorBanner from "@components/molecules/DecorBanner.astro";
 import AnimeSection from "@components/organisms/AnimeSection.svelte";
 import I18nKey from "@i18n/i18nKey";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { animeConfig } from "@/config/animeConfig";
 import { resolveI18nText } from "@utils/i18n-utils";
+import { animeConfig } from "@/config/animeConfig";
 import { getAnimeList } from "../utils/anime-data";
 
 if (!animeConfig.enable) {
@@ -15,11 +19,15 @@ if (!animeConfig.enable) {
 }
 
 const pageTitle = resolveI18nText(animeConfig.title, I18nKey.anime);
-const pageDescription = resolveI18nText(animeConfig.description, I18nKey.animeBanner);
+const pageDescription = resolveI18nText(
+	animeConfig.description,
+	I18nKey.animeBanner,
+);
 
 const animes = await getAnimeList();
 ---
 
 <MainGridLayout title={pageTitle} description={pageDescription} page="anime">
+    <DecorBanner class="mb-4" />
     <AnimeSection animes={animes} title={pageTitle} subtitle={pageDescription} client:visible></AnimeSection>
 </MainGridLayout>

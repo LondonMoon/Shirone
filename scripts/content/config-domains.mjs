@@ -165,6 +165,31 @@ export const CONFIG_DOMAINS = Object.freeze([
 		module: "@/types/umamiConfig",
 	},
 	{
+		// 页脚全站统计（Vercount）。
+		// 补登记之前 `withUserConfig("vercount", …)` 在内容仓 YAML 路径上是**死的**：
+		// content:sync 永远不会发射 vercount 键，`config/vercount.yaml` 拿不到类型校验，
+		// 且 tests/content/content-config.test.mjs 只在 CONFIG_DOMAINS 自身做检查、抓不到。
+		key: "vercount",
+		file: "vercount",
+		type: "VercountConfig",
+		module: "@/types/vercountConfig",
+	},
+	{
+		// 二次元装饰：文章头部贴纸 + 番剧页横幅。
+		key: "decor",
+		file: "decor",
+		type: "DecorConfig",
+		module: "@/types/decorConfig",
+	},
+	{
+		// 「写新文章」快捷入口。与 vercount 同一类漏登记：该领域的
+		// withUserConfig() 在内容仓 YAML 路径上原本是死路径。
+		key: "newPost",
+		file: "new-post",
+		type: "NewPostConfig",
+		module: "@/types/newPostConfig",
+	},
+	{
 		key: "about",
 		file: "about",
 		type: "AboutConfig",

@@ -5,6 +5,7 @@ import IconButton from "@components/atoms/action/IconButton.svelte";
 import AccentBar from "@components/atoms/display/AccentBar.svelte";
 import Card from "@components/atoms/display/Card.svelte";
 import Markdown from "@components/content/Markdown.astro";
+import DecorSticker from "@components/molecules/DecorSticker.astro";
 import ImageWrapper from "@components/molecules/ImageWrapper.astro";
 import LastUpdatedNotice from "@components/molecules/LastUpdatedNotice.astro";
 import License from "@components/molecules/License.astro";
@@ -244,6 +245,9 @@ const jsonLd = {
 						<UmamiStats variant="meta" path={canonicalPostUrl} />
 					</div>
 				)}
+				{/* 二次元装饰贴纸：落在字数行右端，即文章头部右上角。
+				    未配置素材时 DecorSticker 直接 return null，本行布局与改动前完全一致。 */}
+				<DecorSticker class="ml-auto self-center" />
 			</div>
 
 			<!-- title -->

@@ -127,6 +127,7 @@ export const siteConfig: SiteConfig = withUserConfig("site", {
 | `contextMenuConfig.ts` | 桌面端右键增强：可选开关（当前默认开启）；配置允许页面与操作顺序，关闭时零 DOM、零监听器、零客户端资源 |
 | `umamiConfig.ts` | Umami 统计：全局开关（默认关闭）、公开分享统计读取，以及可选的官方访问采集脚本配置；支持内容仓 `config/umami.yaml` 覆盖（领域键 `umami`） |
 | `vercountConfig.ts` | 全站访问统计（Vercount）：全局开关（默认关闭）、计数脚本地址；只输出**页脚全站总访问量/总访客数**，单篇阅读量由 Twikoo 的 `twikoo_visitors` 负责（两者刻意不重叠）。关闭时零 DOM、零脚本、零请求；Swup 下的「每次导航恰好计一次」与实测方法见 `docs/vercount-guide.md` |
+| `decorConfig.ts` | 二次元装饰两个落点：文章头部贴纸（`postSticker`，静态、`object-contain` 不裁切）与番剧页横幅（`animeBanner`，`--m3e-duration-ambient-long` 环境动效、可降级）。总开关之外**以素材是否到位为条件**：`src` 为空时不产出任何 DOM。素材路径、尺寸预算与授权现状见 `docs/anime-decoration.md` |
 | `integrationsConfig.ts` | 所有模式（源码仓 + npm 包项目）共用的集成选项，唯一装载入口是 `src/integration/index.ts`：swup / astro-icon / expressive-code / svelte / mdx 的选项、`vite.build` 共用部分、`trailingSlash` 与 `image.endpoint.route` 的配对、音乐侧栏虚拟模块 id。**本目录里唯一的例外**：不走 barrel、不经 `withUserConfig`、也不被 `loadConfigModule` 动态加载（包模式在构建期把它打进 `dist/index.js`），所以它没有用户覆盖层，用户项目里的那份拷贝是死的 |
 | `sitemapFilter.ts` | 由 `*Config.enable === false` 推导被关闭的页面清单，供 `sitemap()` 的 `filter` 排除它们。包模式通过 `loadConfigModule` 加载，用户可自行覆盖 |
 | `skillsConfig.ts` | 技能页行为控制：页面总开关、分类清单与单项禁用列表（技能内容维护在 `src/data/skills.ts`）；关闭页面时导航入口同步隐藏 |

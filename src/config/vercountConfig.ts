@@ -26,7 +26,11 @@ import { withUserConfig } from "../utils/config-overlay.ts";
  * - 计数与访客去重发生在第三方服务端，站点侧无法校验其准确性。
  */
 export const vercountConfig: VercountConfig = withUserConfig("vercount", {
-	enable: false,
+	/**
+	 * 本 fork（LondonMoon/Shirone）显式启用，因此默认值与主题上游不同。
+	 * 若要回馈上游，这里必须还原为 `enable: false`。
+	 */
+	enable: true,
 	/** 官方端点；Vercount 为公益项目，自托管时替换为自有地址。 */
 	scriptUrl: "https://events.vercount.one/js",
 });

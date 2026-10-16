@@ -1,0 +1,77 @@
+---
+/**
+ * 文章头部装饰贴纸（`decorConfig.postSticker`）。
+ *
+ * 定位：文章标题区右上角的静态小图（`alt=""` + `aria-hidden`，纯装饰，
+ * 因此不需要任何 i18n 键）。图片用 `object-contain`——贴纸是角色立绘，
+ * 裁切会切掉人物；这与 `ImageWrapper` 面向封面的 `object-cover` 语义相反，
+ * 所以这里不复用 `ImageWrapper`。
+ *
+ * 「零额外负担」：`resolveDecorOptions()` 在该落点没有素材时返回 `null`，
+ * 组件直接 `return null`——零 DOM、零请求、零布局偏移，父容器（字数行）
+ * 的 flex 布局完全不受影响。
+ *
+ * 图片解析与 `Profile.astro` 同法：本地资产走 `resolveImageAsset` +
+ * `getImage` 生成 1x/2x 候选；`public/` 与远程路径原样输出。
+ */
+import { getImage } from "astro:assets";
+import { resolveImageAsset } from "@utils/asset-utils";
+import { url } from "@utils/url-utils";
+import { decorConfig, resolveDecorOptions } from "@/config";
+
+interface Props {
+	class?: string;
+}
+
+const options = resolveDecorOptions(decorConfig)?.postSticker ?? null;
+if (!options) {
+	return null;
+}
+
+const { src, width, height } = options;
+const className = Astro.props.class;
+
+const asset = await resolveImageAsset(src);
+const isPublic = src.startsWith("/");
+const imageUrl =
+	typeof asset === "string" ? (isPublic ? url(src) : src) : asset.src;
+
+/** 1x / 2x 候选；源图不足 2x 时不放大（避免把糊图当高清图输出）。 */
+let srcset: string | undefined;
+if (typeof asset !== "string") {
+	const widths = [width, width * 2].filter((value) => value <= asset.width);
+	const candidates = await Promise.all(
+		widths.map(async (value) => ({
+			width: value,
+			image: await getImage({
+				src: asset,
+				width: value,
+				format: "webp",
+				quality: 78,
+			}),
+		})),
+	);
+	if (candidates.length > 0) {
+		srcset = candidates
+			.map((candidate) => `${candidate.image.src} ${candidate.width}w`)
+			.join(", ");
+	}
+}
+---
+
+<img
+	src={imageUrl}
+	srcset={srcset}
+	sizes={`${width}px`}
+	width={width}
+	height={height}
+	alt=""
+	aria-hidden="true"
+	decoding="async"
+	loading="lazy"
+	data-decor-sticker
+	class:list={[
+		"pointer-events-none select-none object-contain shrink-0",
+		className,
+	]}
+/>

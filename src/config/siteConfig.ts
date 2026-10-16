@@ -10,7 +10,9 @@ import { withUserConfig } from "../utils/config-overlay.ts";
  * 类型见 src/types/config.ts。
  */
 export const siteConfig: SiteConfig = withUserConfig("site", {
-	site: "https://shirone.mysqil.com/",
+	// 本 fork（LondonMoon/Shirone）的自有域名。canonical / OG / JSON-LD / sitemap
+	// 都由此派生；改主题示例域名前请确认这是你真正上线的站点。
+	site: "https://londonmoon.dpdns.org/",
 	base: "/",
 	title: "Shirone",
 	subtitle: "A Material 3 anime blog",

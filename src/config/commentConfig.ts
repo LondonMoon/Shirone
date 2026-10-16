@@ -36,16 +36,26 @@ import { withUserConfig } from "../utils/config-overlay.ts";
  *    `lang` 与 `scriptUrl`（自托管 giscus 时替换）。
  */
 export const commentConfig: CommentConfig = withUserConfig("comment", {
-	/** 全局评论总开关：false 时完全不加载评论脚本与 DOM */
-	enable: false,
+	/**
+	 * 全局评论总开关：false 时完全不加载评论脚本与 DOM。
+	 *
+	 * 【本 fork 的例外】`enable: true` + `provider: "twikoo"` 是本 fork
+	 * （LondonMoon/Shirone）的显式选择，与 `newPostConfig.ts` 同一先例；
+	 * 回馈上游时必须还原为 `enable: false` + `provider: "none"`。
+	 *
+	 * 安全边界：只要 `twikoo.envId` 仍为空，`resolveCommentOptions()` 就返回 `null`，
+	 * 评论区、`/guestbook` 与评论 FAB 全部静默关闭、导航入口自动裁掉。
+	 * 因此「先把开关接好、后填服务地址」不会产出半截 UI。
+	 */
+	enable: true,
 	/** 评论提供商类型："none" | "twikoo" | "giscus" */
-	provider: "none",
+	provider: "twikoo",
 	/** 是否开启视口懒加载：滚动进入视口才动态加载评论组件（推荐 true） */
 	lazy: true,
 	/** Twikoo 专有配置 */
 	twikoo: {
 		/** Twikoo 环境 ID（如 "https://your-twikoo.vercel.app" 或腾讯云环境 ID） */
-		envId: "",
+		envId: "https://twikoojslondonmoon.netlify.app/.netlify/functions/twikoo",
 		/**
 		 * Twikoo 前端 JS 脚本 CDN 地址。
 		 *
@@ -65,7 +75,7 @@ export const commentConfig: CommentConfig = withUserConfig("comment", {
 		 */
 		lang: "auto",
 		/** 评论输入框占位提示文本 */
-		placeholder: "Share your thoughts...",
+		placeholder: "说点什么吧…",
 	},
 	/** Giscus 专有配置（基于 GitHub Discussions，评论数据存储在公开仓库中） */
 	giscus: {

@@ -1,22 +1,36 @@
 # 二次元装饰素材指南
 
-> 适用：Hero 横幅、页脚、侧栏的装饰图。
-> 相关配置：`src/config/siteConfig.ts`（banner）、`src/config/footerConfig.ts` + `FooterConfig.html`、`src/config/sidebarConfig.ts`。
+> 适用：Hero 横幅、页脚、文章头部贴纸、番剧页横幅的装饰图。
+> 相关配置：`src/config/siteConfig.ts`（banner）、`src/config/footerConfig.ts` + `FooterConfig.html`、
+> `src/config/decorConfig.ts`（文章头部贴纸 + 番剧页横幅）、`src/config/sidebarConfig.ts`。
 
-## 0. 为什么素材不进仓库
+## 0. 素材放哪：两条路径，按落点选
 
-本站（`LondonMoon/Shirone`）是**公开仓库**。把第三方壁纸提交进来等于向全世界再分发，
-而且会留在 git 历史里，事后删除也无法真正撤回。因此：
+本仓库提供两条互斥的素材路径，**能力不同**，先选路线再放图：
 
-- 素材放在 `public/assets/anime-deco/`，该目录**已在 `.gitignore` 中排除**（只保留 `.gitkeep`）；
-- 部署时把图片单独同步到服务器/对象存储的同一路径；
-- 仓库里只保留「引用路径」的配置。
+| 路径 | 进 git | 图片管线 | 适用 |
+|---|---|---|---|
+| **`src/assets/images/deco/`**（推荐） | ✅ 提交 | **AVIF(q55)/WebP(q68) + 1280/1600/1920 srcset**（`ImageWrapper` / `getImage`） | 授权干净的素材；想要优化与响应式 |
+| `public/assets/anime-deco/`（`.gitignore:59`） | ❌ 不进 | 原样输出的普通 `<img>`：**无 AVIF、无 srcset、无重编码** | 版权不明、不愿进公开仓库的素材；需自行预压缩 |
 
-```gitignore
-# 二次元装饰素材（版权原因不进仓库；部署时单独同步）
-public/assets/anime-deco/*
-!public/assets/anime-deco/.gitkeep
+引用方式：
+
+```ts
+// 路线一：相对 src/ 的路径，走构建期优化
+postSticker: { src: "assets/images/deco/sticker.webp", width: 56, height: 56 },
+// 路线二：以 / 开头的 public 路径，原样输出且不进仓库
+postSticker: { src: "/assets/anime-deco/sticker.webp", width: 56, height: 56 },
 ```
+
+**本 fork 的当前决策（2026-10，覆盖此前选择）**：装饰素材走**路线一**（提交进
+`src/assets/images/deco/`），以获得 AVIF/WebP + srcset。
+
+> ⚠️ **这条决策反转了提交 `5c18c70`**（`docs(config): document anime decoration and keep
+> licensed art out of the repo`）。当时的选择是「授权素材一律不进仓库」；现在为了让
+> Netlify 构建能拿到素材（gitignore 的文件在干净 clone 里不存在，部署后必然裂图），
+> 改为提交。**后果必须知情**：素材一旦提交就永久留在 git 历史里，事后删除无法真正撤回；
+> `LondonMoon/Shirone` 是公开仓库，被 fork 后还会继续流传。想回到旧策略就用路线二，
+> 并接受「无优化 + 需要额外的部署同步手段」。
 
 ## 1. 素材从哪来（已核实的授权现状）
 
@@ -49,24 +63,33 @@ public/assets/anime-deco/*
 BanG Dream 系自绘、以及真·免费图库（[いらすとや](https://www.irasutoya.com/p/terms.html)
 免费含商用且无需署名；Kenney / Openclipart 为 CC0；Unsplash 仅照片）。
 
+> **站点所有者的选择（2026-10）**：本站素材由所有者自行收集并提供，
+> 上表 ❌ 项目的再分发风险由所有者承担，不隐藏、不推给工具。
+> 素材来源与授权记录模板见 `docs/decor-integrations-rollout.md` §4。
+
 ## 2. 尺寸与体积预算
 
 | 位置 | 建议源尺寸 | 体积目标 | 格式 |
 |---|---|---|---|
 | Hero 横幅（全幅） | 1920–2560 宽（16:9） | **100–200 KB**，硬上限 ~300 KB | AVIF → WebP |
+| 番剧页横幅 | 1920–2560 宽（21:9，即 1920×823 起） | **100–200 KB** | AVIF → WebP |
+| 文章头部贴纸 | 长边 112–256（渲染 56px 的 2x） | ≤40 KB | WebP / PNG |
 | 侧栏/页脚贴纸 | 长边 ≤512 | ≤40 KB（矢量优先） | SVG 或 AVIF |
 
 - 主题的 `BannerStage` 会自动从源图生成 AVIF(q55)/WebP(q68) 与 1280/1600/1920 的 srcset，
   所以**源图给到 1920–2560 宽就够**；塞 4K 原图只会让仓库与构建变慢，输出并不会更清晰。
 - 装饰性全幅图通常**不是** LCP 元素（Chromium 的 LCP 启发式会排除满屏元素），
   但字节仍算在流量与 LCP 预算里，别放几 MB 的图。
+- 贴纸渲染尺寸由 `decorConfig.postSticker.width/height` 决定，可用范围被收敛到
+  `DECOR_STICKER_MIN_SIZE`(16) ~ `DECOR_STICKER_MAX_SIZE`(512)；
+  源图给到**渲染宽度的 2 倍**即可（组件只生成 1x/2x 候选，且不放大）。
 
-## 3. 三个位置怎么接
+## 3. 五个位置怎么接
 
 ### 3.1 Hero 横幅（零代码）
 
-图片放进 `public/assets/anime-deco/` 后，把 `src/config/siteConfig.ts` 的 `banner.src`
-指过去即可（数组顺序就是轮播顺序）：
+图片放进 `public/assets/anime-deco/` 后（或 `src/assets/images/banner/desktop/`），
+把 `src/config/siteConfig.ts` 的 `banner.src` 指过去即可（数组顺序就是轮播顺序）：
 
 ```ts
 src: {
@@ -79,8 +102,7 @@ src: {
 ```
 
 想继续享受构建期 AVIF/WebP 优化，则把图放进 `src/assets/images/banner/desktop/` 并写
-相对 `src` 的路径（如 `assets/images/banner/desktop/hero-1.webp`）——注意那会**进仓库**，
-版权素材不要这么做。
+相对 `src` 的路径（如 `assets/images/banner/desktop/hero-1.webp`）。
 
 ### 3.2 页脚（零代码）
 
@@ -102,18 +124,66 @@ src: {
 | 选项 | 代价 | 说明 |
 |---|---|---|
 | A. 新增装饰 widget | 文档规定的 5 步：扩展 `SidebarWidget` 联合类型 → molecule 组件 → `SideBar.astro` 的 `componentMap` → `sidebarConfig` 默认 `enable: false` → 更新 `docs/sidebar-system.md` / `docs/sidebar-widgets.md` | 一等公民，可做页面过滤/分栏/懒加载 |
-| B. 不做侧栏装饰 | 0 | Hero 与页脚已经承担了装饰职责，侧栏叠加装饰也容易与 TOC/音乐等 widget 抢视觉 |
+| B. 不做侧栏装饰 | 0 | Hero、页脚、文章头部与番剧页已经承担了装饰职责，侧栏叠加装饰也容易与 TOC/音乐等 widget 抢视觉 |
 
 当前采用 **B**（未新增 widget）。需要 A 时按 `docs/sidebar-system.md` §6 的步骤加即可。
 
-## 4. 尚未完成的一件事：站点域名
+### 3.4 文章头部贴纸（配置层，`decorConfig.postSticker`）
 
-`src/config/siteConfig.ts` 的 `url` 仍是主题示例站 `https://shirone.mysqil.com`，
-构建产物里的 canonical / OG / 重定向都指向它。**上线前必须改成你自己的域名**，
-否则搜索引擎会把权重归给示例站。
+落点在文章标题区**右上角**——具体实现是字数/阅读时长那一行的右端
+（`src/pages/posts/[...slug].astro`），刻意避开文章顶部的横幅位：那个位置已经被
+frontmatter 的 `image` 占用（同时兼作 `ogImage`），叠加会语义重复。
+
+```ts
+// src/config/decorConfig.ts
+postSticker: {
+	src: "assets/images/deco/sticker.webp",
+	width: 56,
+	height: 56,
+},
+```
+
+- 静态、无动效；`alt=""` + `aria-hidden="true"`（纯装饰，因此不需要 i18n 键）；
+- 用 `object-contain` 渲染——贴纸是角色立绘，`object-cover` 会切掉人物；
+- `src` 为空时组件 `return null`：零 DOM、零请求，字数行布局与改动前完全一致。
+
+### 3.5 番剧页横幅（配置层，`decorConfig.animeBanner`）
+
+落在 `/anime/` 页面上、`<AnimeSection>` **之外**（`src/pages/anime.astro`），
+是纯 SSR 输出，不增加 hydration 成本。
+
+```ts
+animeBanner: {
+	src: "assets/images/deco/anime-banner.webp",
+	ratio: "21 / 9",   // 容器恒定宽高比，消除 CLS
+	motion: true,      // --m3e-duration-ambient-long（13s）极缓呼吸
+},
+```
+
+- 动效走 `--m3e-duration-ambient-long`，该令牌的语义即「仅持续环境装饰，不用于交互反馈」；
+- **降级两条路径都覆盖**：系统 `prefers-reduced-motion` 与站点手动 `html.motion-reduced`
+  （注意 `DecorBanner.astro` 里那两条规则必须重复完整选择器，否则会被动画规则的特异性压掉）；
+- `ratio` 只接受 `<数字> / <数字>`，非法值回落 `21 / 9`，避免任意字符串进入内联样式。
+
+## 4. 站点域名（已完成）
+
+`src/config/siteConfig.ts` 的 `site` 原为主题示例站 `https://shirone.mysqil.com/`，
+构建产物里的 canonical / OG / JSON-LD / sitemap / robots 都从它派生。
+
+**2026-10 已改为本站域名 `https://londonmoon.dpdns.org/`。**
+
+仍留在代码仓里的示例域名（有意保留，不要跟着改）：
+
+- `package.json` 的 `homepage`、四个 `README*.md` 的演示站与文档站链接 —— 它们是**主题**的
+  元数据与上游链接，不是本站身份；
+- `src/pages/llms.txt.ts` / `llms-full.txt.ts` 里的字符串兜底 —— 仅在
+  `context.site` 与 `siteConfig.site` **同时缺失**时才会命中。
 
 ## 5. 验收
 
-- Hero/页脚改动属配置层：`pnpm.cmd build` 后确认 `dist/index.html` 里出现预期路径的图片
+- Hero / 页脚改动属配置层：`pnpm.cmd build` 后确认 `dist/index.html` 里出现预期路径的图片
   引用、且体积在预算内；
-- 素材目录不进仓库：`git status` 不应出现 `public/assets/anime-deco/` 下的图片文件。
+- 装饰两个落点：`npx.cmd playwright test tests/site/decor.spec.ts`
+  （未配素材时断言零 DOM / 零请求；配了素材后自动启用 DOM 与动效降级用例）；
+- 路线一（`src/assets/images/deco/`）：素材应出现在 `git status` 中——**这是预期行为**；
+- 路线二（`public/assets/anime-deco/`）：`git status` **不应**出现该目录下的图片文件。

@@ -1,0 +1,82 @@
+---
+/**
+ * 番剧页装饰横幅（`decorConfig.animeBanner`）。
+ *
+ * 定位：`/anime/` 页面级的唯一视觉焦点，落在 `<AnimeSection>` **之外**
+ * （由 `src/pages/anime.astro` 组合），因此是纯 SSR 输出、不增加任何
+ * hydration 成本，也不改动 runes 交互岛的模板。
+ *
+ * 环境动效：`--m3e-duration-ambient-long`（13s）极缓呼吸 + 轻微位移。
+ * 该令牌的语义就是「仅持续环境装饰，不用于交互反馈」（`docs/m3e-standard.md:98`）。
+ * 降级走两条既有开关：系统 `prefers-reduced-motion` 与站点手动
+ * `html.motion-reduced`（`src/utils/setting-utils.ts:187`）。
+ *
+ * 「零额外负担」：没有素材时 `return null`——零 DOM、零布局偏移；
+ * 有素材时用 `ImageWrapper` 承担 AVIF/WebP + srcset 与稳定宽高比（消除 CLS）。
+ */
+import ImageWrapper from "@components/molecules/ImageWrapper.astro";
+import { decorConfig, resolveDecorOptions } from "@/config";
+
+interface Props {
+	class?: string;
+}
+
+const options = resolveDecorOptions(decorConfig)?.animeBanner ?? null;
+if (!options) {
+	return null;
+}
+
+const { src, ratio, motion } = options;
+const className = Astro.props.class;
+---
+
+<div
+	class:list={["decor-banner w-full", className]}
+	data-decor-banner
+	data-decor-motion={motion ? "true" : "false"}
+	aria-hidden="true"
+>
+	<div class="decor-banner__frame">
+		<ImageWrapper
+			src={src}
+			alt=""
+			aspectRatio={ratio}
+			position="center"
+			loading="lazy"
+			widths={[640, 960, 1280, 1600, 1920]}
+			sizes="(min-width: 1280px) 1024px, 100vw"
+			formats={["avif", "webp"]}
+			quality={62}
+			class="rounded-[var(--shape-corner-l)]"
+		/>
+	</div>
+</div>
+
+<style lang="stylus">
+/* 容器只负责动效，尺寸与裁切由 ImageWrapper 内部的 aspect-ratio 决定。 */
+.decor-banner__frame
+	transform-origin: center
+
+.decor-banner[data-decor-motion="true"] .decor-banner__frame
+	animation: decor-banner-breathe var(--m3e-duration-ambient-long) var(--m3e-easing-standard) infinite alternate
+	will-change: transform
+
+@keyframes decor-banner-breathe
+	from
+		transform: scale(1) translateY(0)
+	to
+		transform: scale(1.012) translateY(-2px)
+
+/* 降级：系统偏好（CSS）与站点手动开关（html.motion-reduced）两条路径都要覆盖。
+   ⚠️ 这两条规则必须**重复完整选择器**（含 `[data-decor-motion="true"]`）：
+   上一条动画规则因为多了这个属性选择器，特异性高于裸的 `.decor-banner__frame`，
+   若这里只写 `.decor-banner__frame`，`animation: none` 会被动画规则压掉、降级失效。 */
+:global(html.motion-reduced) .decor-banner[data-decor-motion="true"] .decor-banner__frame
+	animation: none
+	will-change: auto
+
+@media (prefers-reduced-motion: reduce)
+	.decor-banner[data-decor-motion="true"] .decor-banner__frame
+		animation: none
+		will-change: auto
+</style>

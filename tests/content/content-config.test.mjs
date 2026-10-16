@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
 	mkdirSync,
 	mkdtempSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
 	writeFileSync,
@@ -58,6 +59,36 @@ describe("配置领域登记表", () => {
 
 	it("生成物不落在 src/generated/，否则图标收集会漏扫用户配置里的图标", () => {
 		assert.ok(!GENERATED_CONFIG_FILE.startsWith("src/generated/"));
+	});
+
+	it("每个 withUserConfig() / getUserConfig() 调用点都已登记，否则覆盖层是死路径", () => {
+		const configDirectory = fileURLToPath(
+			new URL("../../src/config", import.meta.url),
+		);
+		const registered = new Set(CONFIG_DOMAINS.map((domain) => domain.key));
+		const callPattern = /(?:with|get)UserConfig\(\s*["']([^"']+)["']/g;
+
+		/** 领域名 -> 首次出现它的配置文件名，便于失败时定位。 */
+		const used = new Map();
+		for (const name of readdirSync(configDirectory)) {
+			if (!name.endsWith(".ts")) continue;
+			const source = readFileSync(join(configDirectory, name), "utf8");
+			for (const match of source.matchAll(callPattern)) {
+				if (!used.has(match[1])) used.set(match[1], name);
+			}
+		}
+
+		assert.ok(used.size > 0, "未在 src/config 下扫描到任何配置领域调用点");
+		const missing = [...used.keys()].filter((key) => !registered.has(key));
+		assert.deepEqual(
+			missing,
+			[],
+			`以下领域调用了 withUserConfig()/getUserConfig()，却没有登记到 CONFIG_DOMAINS，` +
+				`内容仓 config/<file>.yaml 对它们是死路径：` +
+				missing
+					.map((key) => `${key} (src/config/${used.get(key)})`)
+					.join("、"),
+		);
 	});
 });
 

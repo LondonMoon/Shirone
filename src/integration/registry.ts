@@ -176,7 +176,11 @@ export function buildOverrideRegistry(
 			// `index.ts` barrels stay owned by the package: overriding one would
 			// break the named-export contract the theme relies on. Matched at any
 			// depth, not just the directory root.
-			if (BARREL_RE.test(rel)) continue;
+			// ⚠️ `rel` comes from `path.relative()`, which yields backslashes on
+			// Windows while BARREL_RE only accepts `/`. Testing the raw value let a
+			// nested barrel register on Windows (Linux/CI never reproduced it), so
+			// normalise first — same treatment `overrideKey()` already applies.
+			if (BARREL_RE.test(normalisePath(rel))) continue;
 
 			const hit = probe(join(target.userDir, rel), target.extensions);
 			if (hit) {
