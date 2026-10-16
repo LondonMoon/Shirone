@@ -180,14 +180,6 @@ export const ja: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"コメントを表示するには JavaScript を有効にしてください",
 
-	[Key.postVisitCount]: "閲覧数",
-
-	[Key.guestbook]: "ゲストブック",
-	[Key.guestbookBanner]: "アカウント登録なしでメッセージを残せます。",
-	[Key.newPost]: "記事を書く",
-	[Key.siteStatsPageViews]: "総アクセス数",
-	[Key.siteStatsVisitors]: "訪問者数",
-
 	[Key.untitled]: "タイトルなし",
 	[Key.uncategorized]: "カテゴリなし",
 	[Key.noTags]: "タグなし",

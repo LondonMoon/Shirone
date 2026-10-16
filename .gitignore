@@ -4,6 +4,11 @@ dist/
 # integration cache (esbuild config bundles, plugin-mode font subsets)
 .shirones/
 
+# Scratch directories the packaging pipeline creates when it transpiles the
+# theme's TypeScript generators. They should never survive a run; the pattern
+# is here so that an aborted one cannot reach a commit.
+.shirones-ts-*/
+
 # content repository working copy, provenance, and safe cleanup backups
 .content-src/
 .content-backup/
@@ -53,11 +58,6 @@ public/assets/anime/covers/*
 # generated responsive moment thumbnails
 public/assets/moments/thumbnails/*
 !public/assets/moments/thumbnails/.gitkeep
-
-# 二次元装饰素材：版权原因不进公开仓库，部署时单独同步
-# 授权现状、尺寸与体积预算见 docs/anime-decoration.md
-public/assets/anime-deco/*
-!public/assets/anime-deco/.gitkeep
 
 # local tooling artifacts
 .zcode/

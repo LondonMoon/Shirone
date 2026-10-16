@@ -25,8 +25,6 @@ description: Configuring a Shirone blog site - site identity, theme colors, navi
 | `articleConfig.ts` | 相关文章、分享与海报 |
 | `commentConfig.ts` | 评论系统(默认关闭,Twikoo / Giscus 双 Provider) |
 | `umamiConfig.ts` | Umami 数据统计：公开分享统计读取，以及可选的官方访问采集脚本 |
-| `vercountConfig.ts` | 页脚全站统计(Vercount，默认关闭)：只输出总访问量/总访客数；单篇阅读量由 Twikoo 负责 |
-| `newPostConfig.ts` | 「写新文章」快捷入口(主题默认关闭)：顶栏与首页 Hero 直链 GitHub 新建文件页并预填 frontmatter |
 | `musicConfig.ts` | 侧栏音乐(当前默认启用，可手动关闭；local/custom/meting/mixed 四种模式) |
 | `animeConfig.ts` | 追番页数据源:本地 / Bangumi 快照 / Bilibili 快照 |
 | `fontConfig.ts` | 字体(构建期 TTF→WOFF2 子集化) |
@@ -53,15 +51,9 @@ description: Configuring a Shirone blog site - site identity, theme colors, navi
 3. 侧栏 widget 的显隐/分栏/页面范围在 `sidebarConfig.ts` 编排;
 4. 页面级开关(如 skills/projects)关闭时导航入口同步隐藏;系列功能还提供 `LinkPresets.Series`(`/series/`)预设但不在默认导航列表中,需用户自行加入 `src/config/navBarConfig.ts`,其内容仓覆盖文件为 `config/series.yaml`(领域键 `series`)。
 
-## 访问统计（Umami / Vercount）
+## Umami 数据统计
 
-两个域职责不同，先分清再改：
-
-- **Umami**（`src/config/umamiConfig.ts`，说明见 `docs/umami-guide.md`）：后台分析，以及可选的官方采集脚本；
-- **Vercount**（`src/config/vercountConfig.ts`，说明见 `docs/vercount-guide.md`）：页脚公开展示的全站总访问量/总访客数。
-  单篇阅读量**不属于它**——由 Twikoo 的 `twikoo_visitors` 提供；不要在页面上同时输出两个口径相同的数字。
-
-当用户询问访问统计、Umami、页面浏览量或访客追踪时，先确认他要的是「后台分析」还是「页面上公开显示的数字」，再改对应的域。字段注释是配置契约的单一真源。
+当用户询问访问统计、Umami、页面浏览量或访客追踪时，只修改 `src/config/umamiConfig.ts`。字段注释是配置契约的单一真源，完整说明见 `docs/umami-guide.md`。
 
 1. **公开统计读取**：设置 `enable: true` 并填写有效的 `shareUrl`（Umami `share/<shareId>` 格式），启用站点与文章统计 UI。
 2. **官方访问采集**：只有在站点所有者明确要求上报访问数据时，才同时填写 `websiteId` 和 `scriptUrl`。任一字段为空，都不得加载官方 Umami 脚本。

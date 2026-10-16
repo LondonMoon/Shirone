@@ -10,9 +10,7 @@ import { withUserConfig } from "../utils/config-overlay.ts";
  * 类型见 src/types/config.ts。
  */
 export const siteConfig: SiteConfig = withUserConfig("site", {
-	// 本 fork（LondonMoon/Shirone）的自有域名。canonical / OG / JSON-LD / sitemap
-	// 都由此派生；改主题示例域名前请确认这是你真正上线的站点。
-	site: "https://londonmoon.dpdns.org/",
+	site: "https://shirone.mysqil.com/",
 	base: "/",
 	title: "Shirone",
 	subtitle: "A Material 3 anime blog",
@@ -29,7 +27,7 @@ export const siteConfig: SiteConfig = withUserConfig("site", {
 		reduceMotion: true, // 是否展示减少动效切换
 		texture: true, // 是否展示背景纹理选择
 	},
-	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
+	lang: "en", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	// IANA time zone for precise post and moment timestamps. It is independent of lang.
 	timeZone: "Asia/Shanghai",
 	themeColor: {
@@ -58,10 +56,6 @@ export const siteConfig: SiteConfig = withUserConfig("site", {
 		// 以 "/" 开头的 public 路径与远程 URL 仍可用，但会保留原图、不生成候选。
 		// desktop 用于 >= 1024px；mobile 仅用于 < 1024px 的首页，手机非首页不显示壁纸。
 		// 数组顺序就是轮播顺序；只需要静态 Banner 时，每组保留一张图片即可。
-		//
-		// 【二次元装饰素材】版权素材不要放进 git 仓库：把图放到已 gitignore 的
-		// public/assets/anime-deco/，这里填 "/assets/anime-deco/<文件名>"；
-		// 授权现状、尺寸与体积预算见 docs/anime-decoration.md。
 		src: {
 			desktop: ["assets/images/banner/desktop/1.webp"],
 			mobile: ["assets/images/banner/mobile/1.webp"],

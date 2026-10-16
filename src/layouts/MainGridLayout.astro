@@ -8,7 +8,6 @@ import RouteProgress from "@components/organisms/RouteProgress.svelte";
 import SideBar from "@components/organisms/SideBar.astro";
 import SiteNavigationDrawer from "@components/organisms/SiteNavigationDrawer.svelte";
 import TopAppBar from "@components/organisms/TopAppBar.astro";
-import VercountStats from "@components/organisms/VercountStats.astro";
 import {
 	generateGridClasses,
 	generateMainContentClasses,
@@ -105,9 +104,6 @@ const mainContentClasses = generateMainContentClasses(sidebarResponsive);
                         <!-- the overflow-hidden here prevent long text break the layout-->
                         <!-- make id different from windows.swup global property -->
                         <slot></slot>
-                        <!-- 全站统计只渲染一次：页脚在布局里有两份（桌面/移动各一），
-                             而 Vercount 按固定 id 回填，重复 id 会让其中一份永远停在占位符。 -->
-                        <VercountStats />
                         <div class="footer col-span-2 onload-animation hidden lg:block">
                             <Footer></Footer>
                         </div>

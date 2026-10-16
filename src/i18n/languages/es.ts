@@ -183,14 +183,6 @@ export const es: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"Los comentarios requieren JavaScript para mostrarse",
 
-	[Key.postVisitCount]: "Visitas",
-
-	[Key.guestbook]: "Libro de visitas",
-	[Key.guestbookBanner]: "Deja un mensaje, no hace falta cuenta.",
-	[Key.newPost]: "Nueva entrada",
-	[Key.siteStatsPageViews]: "Visitas totales",
-	[Key.siteStatsVisitors]: "Visitantes",
-
 	[Key.untitled]: "Sin título",
 	[Key.uncategorized]: "Sin categoría",
 	[Key.noTags]: "Sin etiquetas",

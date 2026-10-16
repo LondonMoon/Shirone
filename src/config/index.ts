@@ -31,16 +31,6 @@ export {
 } from "./commentConfig";
 export { compassConfig } from "./compassConfig";
 export { contextMenuConfig } from "./contextMenuConfig";
-export {
-	DECOR_BANNER_DEFAULT_RATIO,
-	DECOR_STICKER_MAX_SIZE,
-	DECOR_STICKER_MIN_SIZE,
-	decorConfig,
-	resolveDecorOptions,
-	type ResolvedDecorBanner,
-	type ResolvedDecorOptions,
-	type ResolvedDecorSticker,
-} from "./decorConfig";
 export { devicesConfig } from "./devicesConfig";
 export { expressiveCodeConfig } from "./expressiveCodeConfig";
 export { fabConfig } from "./fabConfig";
@@ -67,7 +57,6 @@ export {
 	resolveMusicOptions,
 } from "./musicConfig";
 export { LinkPresets, navBarConfig } from "./navBarConfig";
-export { newPostConfig, resolveNewPostOptions } from "./newPostConfig";
 export { permalinkConfig } from "./permalinkConfig";
 export { POST_CARD_MIN_WIDTH, postListConfig } from "./postListConfig";
 export { profileConfig } from "./profileConfig";
@@ -88,10 +77,3 @@ export {
 	resolveUmamiOptions,
 	umamiConfig,
 } from "./umamiConfig";
-export {
-	type ResolvedVercountOptions,
-	resolveVercountOptions,
-	VERCOUNT_SITE_PV_ID,
-	VERCOUNT_SITE_UV_ID,
-	vercountConfig,
-} from "./vercountConfig";

@@ -3,7 +3,6 @@ import { i18n } from "@i18n/translation";
 import { aboutConfig } from "@/config/aboutConfig";
 import { albumsConfig } from "@/config/albumsConfig";
 import { animeConfig } from "@/config/animeConfig";
-import { commentConfig, resolveCommentOptions } from "@/config/commentConfig";
 import { compassConfig } from "@/config/compassConfig";
 import { devicesConfig } from "@/config/devicesConfig";
 import { friendsConfig } from "@/config/friendsConfig";
@@ -129,16 +128,10 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		icon: "material-symbols:info-outline-rounded",
 		pageKey: "about",
 	},
-	Guestbook: {
-		name: i18n(I18nKey.guestbook),
-		url: "/guestbook/",
-		icon: "material-symbols:chat-outline-rounded",
-		pageKey: "guestbook",
-	},
 	GitHub: {
 		name: "GitHub",
 		url: "https://github.com/LyraVoid/Shirone",
-		icon: "fa6-brands:github",
+		icon: "fa7-brands:github",
 		external: true,
 		pageKey: "github",
 	},
@@ -166,7 +159,6 @@ const defaultNavBarConfig: NavBarConfig = {
 				// 需要时取消注释即可
 				// LinkPresets.Categories,
 				// LinkPresets.Tags,
-				LinkPresets.Guestbook,
 				LinkPresets.About,
 				LinkPresets.GitHub,
 			],
@@ -203,8 +195,6 @@ const unavailableFeatureRoutes: ReadonlySet<string> = new Set([
 	...(timelineConfig.enable ? [] : ["/timeline"]),
 	...(aboutConfig.enable ? [] : ["/about"]),
 	...(seriesConfig.enable ? [] : ["/series"]),
-	// 留言板依赖评论系统：评论未启用时该页 404，入口一并裁掉
-	...(resolveCommentOptions(commentConfig) !== null ? [] : ["/guestbook"]),
 ]);
 
 /**

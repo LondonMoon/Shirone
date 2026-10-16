@@ -180,14 +180,6 @@ export const ko: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"댓글을 표시하려면 JavaScript를 활성화해야 합니다",
 
-	[Key.postVisitCount]: "조회수",
-
-	[Key.guestbook]: "방명록",
-	[Key.guestbookBanner]: "계정 없이 메시지를 남길 수 있습니다.",
-	[Key.newPost]: "새 글 쓰기",
-	[Key.siteStatsPageViews]: "총 조회수",
-	[Key.siteStatsVisitors]: "방문자 수",
-
 	[Key.untitled]: "제목 없음",
 	[Key.uncategorized]: "분류되지 않음",
 	[Key.noTags]: "태그 없음",

@@ -173,14 +173,6 @@ export const zh_CN: Translation = {
 	[Key.commentsLoadFailed]: "评论加载失败",
 	[Key.commentsRequiresJavaScript]: "评论区需要启用 JavaScript 才能显示",
 
-	[Key.postVisitCount]: "本页阅读",
-
-	[Key.guestbook]: "留言板",
-	[Key.guestbookBanner]: "欢迎在这里留言，无需注册账号。",
-	[Key.newPost]: "写新文章",
-	[Key.siteStatsPageViews]: "总访问量",
-	[Key.siteStatsVisitors]: "总访客数",
-
 	[Key.untitled]: "无标题",
 	[Key.uncategorized]: "未分类",
 	[Key.noTags]: "无标签",

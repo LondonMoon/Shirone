@@ -183,14 +183,6 @@ export const vi: Translation = {
 	[Key.commentsLoadFailed]: "Không thể tải bình luận",
 	[Key.commentsRequiresJavaScript]: "Bình luận yêu cầu JavaScript để hiển thị",
 
-	[Key.postVisitCount]: "Lượt xem",
-
-	[Key.guestbook]: "Sổ lưu bút",
-	[Key.guestbookBanner]: "Để lại lời nhắn mà không cần tài khoản.",
-	[Key.newPost]: "Viết bài mới",
-	[Key.siteStatsPageViews]: "Tổng lượt xem",
-	[Key.siteStatsVisitors]: "Khách truy cập",
-
 	[Key.untitled]: "Không tiêu đề",
 	[Key.uncategorized]: "Chưa phân loại",
 	[Key.noTags]: "Chưa có thẻ",

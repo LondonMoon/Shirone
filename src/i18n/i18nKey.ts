@@ -171,14 +171,6 @@ enum I18nKey {
 	commentsLoading = "commentsLoading",
 	commentsLoadFailed = "commentsLoadFailed",
 	commentsRequiresJavaScript = "commentsRequiresJavaScript",
-	/** Twikoo 单篇访问量前缀（Twikoo 官方：暂不支持全站访问量统计） */
-	postVisitCount = "postVisitCount",
-
-	guestbook = "guestbook",
-	guestbookBanner = "guestbookBanner",
-
-	/** 「写新文章」快捷入口（顶栏图标按钮与首页 Hero 次级按钮共用） */
-	newPost = "newPost",
 
 	untitled = "untitled",
 	uncategorized = "uncategorized",
@@ -204,9 +196,6 @@ enum I18nKey {
 	statsDaysAgo = "statsDaysAgo",
 	profileStatsPageViews = "profileStatsPageViews",
 	profileStatsVisits = "profileStatsVisits",
-	/** 页脚全站统计（Vercount）：总访问量 / 总访客数 */
-	siteStatsPageViews = "siteStatsPageViews",
-	siteStatsVisitors = "siteStatsVisitors",
 
 	calendar = "calendar",
 	calendarBackToday = "calendarBackToday",

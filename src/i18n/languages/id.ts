@@ -185,14 +185,6 @@ export const id: Translation = {
 	[Key.commentsRequiresJavaScript]:
 		"Komentar memerlukan JavaScript untuk ditampilkan",
 
-	[Key.postVisitCount]: "Dilihat",
-
-	[Key.guestbook]: "Buku Tamu",
-	[Key.guestbookBanner]: "Tinggalkan pesan tanpa perlu akun.",
-	[Key.newPost]: "Tulis artikel",
-	[Key.siteStatsPageViews]: "Total kunjungan",
-	[Key.siteStatsVisitors]: "Pengunjung",
-
 	[Key.untitled]: "Tanpa Judul",
 	[Key.uncategorized]: "Tanpa Kategori",
 	[Key.noTags]: "Tanpa Tag",
