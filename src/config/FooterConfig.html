@@ -1,5 +1,29 @@
-<!--
-  在这里添加自定义的页脚 HTML 内容（例如 ICP 备案号、公安备案图标与链接、自定义声明等）。
-  需要在 src/config/footerConfig.ts 中保持 enable: true；
-  内容将注入在页脚版权信息上方；若文件留空或仅保留注释，则不会产生任何额外的 DOM 结构。
--->
+<!-- 引入不蒜子统计脚本 (必选) -->
+<script defer src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js"></script>
+
+<!-- 统计展示区域 -->
+<div style="text-align:center;font-size:0.85em;opacity:0.75;line-height:1.8;">
+  <!-- 原有功能：本站已运行天数 -->
+  <div>
+    本站已运行 <span id="site-days">…</span> 天
+  </div>
+  <!-- 新增：访客数与浏览量统计 -->
+  <div>
+    总访客数 <span id="busuanzi_value_site_uv">--</span> 人 
+    · 总访问量 <span id="busuanzi_value_site_pv">--</span> 次
+  </div>
+</div>
+
+<!-- 运行天数的脚本 (保留) -->
+<script>
+  const start = new Date("2026-01-01").getTime()
+  const el = document.getElementById("site-days")
+  const update = () => {
+    // 防止元素不存在时报错
+    if (el) { 
+        el.textContent = Math.floor((Date.now() - start) / 86400000)
+    }
+  }
+  update()
+  setInterval(update, 3600000) // 每小时更新一次
+</script>

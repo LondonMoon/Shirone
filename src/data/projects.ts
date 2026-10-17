@@ -6,41 +6,44 @@ import type { ProjectItem } from "@/types/projectsConfig";
 
 export const projectsData: ProjectItem[] = [
 	{
-		key: "shirone",
-		title: "Shirone",
+		key: "game",
+		title: "落井下石",
 		summary:
-			"An Astro blog theme shaped around an M3E component system, expressive content, and resilient client navigation.",
+			"一款肉鸽棋类游戏",
 		category: "theme",
 		phase: "building",
-		technologies: ["Astro", "Svelte", "TypeScript", "Tailwind CSS"],
-		icon: "material-symbols:deployed-code-outline-rounded",
-		cover: "/assets/projects/shirone.webp",
-		coverAlt: "Shirone theme homepage preview",
+		technologies: ["Godot"],
+		icon: "vscode-icons:file-type-gdscript",
+		coverAlt: "落井下石",
 		featured: true,
-		repository: "https://github.com/LyraVoid/Shirone",
 		year: "2026",
 	},
 	{
-		key: "folkpatch",
-		title: "FolkPatch",
-		summary: "A kernel-level root solution for Android, built on APatch.",
-		category: "android",
-		phase: "building",
-		technologies: ["Kotlin", "APatch", "Android"],
-		icon: "material-symbols:terminal-rounded",
-		repository: "https://github.com/LyraVoid/FolkPatch",
+		key: "tool",
+		title: "音乐爬取",
+		summary:
+			"音乐爬取程序",
+		category: "theme",
+		phase: "shipped",
+		technologies: ["Python"],
+		icon: "vscode-icons:file-type-cython",
+		coverAlt: "音乐爬取程序",
+		featured: true,
+		year: "2026",
 	},
 	{
-		key: "kernelpatch",
-		title: "KernelPatch",
+		key: "tool",
+		title: "小说爬取",
 		summary:
-			"A kernel patch framework that powers APatch-style root on Android by loading code into the running kernel.",
-		category: "android",
+			"小说爬取程序",
+		category: "theme",
 		phase: "shipped",
-		technologies: ["C", "Linux Kernel", "Android"],
-		icon: "material-symbols:extension-outline-rounded",
-		repository: "https://github.com/lyravoid/KernelPatch",
-	},
+		technologies: ["Python"],
+		icon: "vscode-icons:file-type-cython",
+		coverAlt: "小说爬取程序",
+		featured: true,
+		year: "2026",
+	}
 ];
 
 /** 获取所有项目数据列表 */
